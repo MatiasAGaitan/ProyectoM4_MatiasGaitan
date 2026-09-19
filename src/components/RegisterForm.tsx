@@ -1,8 +1,9 @@
 import { useState } from "react";
 import type { FieldError, RegisterFormState } from "../types/auth.ts"
 import { validateErrorsRegister } from "../utils/authValidation.ts";
-import simulateSendForm from "./SimulateSendForm.tsx";
 import { useNavigate } from "react-router-dom";
+import { getAuthErrorMessage } from "../features/authErrors.ts";
+import { useAuth } from "../features/Authenticator.tsx";
 
 function RegisterForm() {
     const navigate = useNavigate()
@@ -21,7 +22,9 @@ function RegisterForm() {
     const [isSubmitSuccess, setIsSubmitSuccess] = useState<boolean>(false)
     const [isSubmitError, setIsSubmitError] = useState<string>("")
 
-    const handlerFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const { signUp, signInWithGoogle } = useAuth()
+
+    const handlerSignUpSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         // Formulario enviado? False
@@ -38,7 +41,7 @@ function RegisterForm() {
         setIsSubmitting(true)
 
         try {
-            await simulateSendForm()
+            await signUp(formRegister.email, formRegister.password)
             //Formulario enviado
             setIsSubmitSuccess(true)
             // Limpiamos el formulario
@@ -46,13 +49,29 @@ function RegisterForm() {
             //Navegamos a la ruta "/tasks"
             navigate("/tasks", { replace: true })
         } catch (error) {
-            error instanceof Error ?
-                setIsSubmitError(error.message)
-                : setIsSubmitError("Ocurrio un error al enviar el formulario")
+            setIsSubmitError(getAuthErrorMessage(error))
+
         } finally {
             // Formulario enviado
             setIsSubmitting(false)
             console.log("reinicio de boton")
+        }
+    }
+
+    const handlerSignUpSubmitWithGoogle = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        setIsSubmitSuccess(false)
+        setIsSubmitError("")
+        setIsSubmitting(true)
+
+        try {
+            await signInWithGoogle()
+            setIsSubmitSuccess(true)
+            navigate("/tasks", { replace: true })
+        } catch (error) {
+            setIsSubmitError(getAuthErrorMessage(error))
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
@@ -64,10 +83,12 @@ function RegisterForm() {
         }))
     }
 
+
+
     return (
-        <form 
+        <form
             className="form-container"
-            onSubmit={handlerFormSubmit} 
+            onSubmit={handlerSignUpSubmit}
             noValidate
         >
             <div className="form-group">
@@ -131,6 +152,14 @@ function RegisterForm() {
                 disabled={isSubmitting}
                 type="submit">
                 {isSubmitting ? "Enviando..." : "Registrarse"}
+            </button>
+
+            <button
+                className="form-button"
+                onClick={handlerSignUpSubmitWithGoogle}
+                disabled={isSubmitting}
+                type="button">
+                {isSubmitting ? "Enviando..." : "Registrarse con Google"}
             </button>
 
             {isSubmitSuccess && <p className="success-text"> Registro exitoso </p>}

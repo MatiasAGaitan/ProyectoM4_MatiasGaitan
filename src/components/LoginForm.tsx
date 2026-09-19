@@ -1,8 +1,9 @@
 import { useState } from "react";
-import simulateSendForm from "./SimulateSendForm.tsx";
+import { useAuth } from "../features/Authenticator.tsx";
 import { useNavigate } from "react-router-dom";
 import { validateErrorsLogin } from "../utils/authValidation.ts";
 import type { LoginFormState, FieldError } from "../types/auth.ts";
+import { getAuthErrorMessage } from "../features/authErrors.ts";
 
 function LoginForm() {
 
@@ -26,8 +27,10 @@ function LoginForm() {
     // Para navegar a otra ruta
     const navigate = useNavigate()
 
+    const { signIn, signInWithGoogle } = useAuth()
+
     // Manejo del envio del formulario
-    const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         // Formulario no enviado por lo tanto success es false
         setIsSubmitSuccess(false)
@@ -42,7 +45,7 @@ function LoginForm() {
         //Enviando formulario
         setIsSubmitting(true)
         try {
-            await simulateSendForm()
+            await signIn(form.email, form.password)
 
             //Formularo enviado por lo tanto true
             setIsSubmitSuccess(true)
@@ -53,12 +56,27 @@ function LoginForm() {
             // Navegamos a la ruta "/tasks"
             navigate("/tasks", { replace: true })
         } catch (error) {
-            error instanceof Error ?
-                setIsSubmitError(error.message)
-                : setIsSubmitError("Ocurrio un error al enviar el formulario")
+            setIsSubmitError(getAuthErrorMessage(error))
+
 
         } finally {
             //Formulario enviado por lo tanto false
+            setIsSubmitting(false)
+        }
+    }
+
+    const handleWithInGoogle = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        setIsSubmitSuccess(false)
+        setIsSubmitError("")
+        setIsSubmitting(true)
+
+        try {
+            await signInWithGoogle()
+            setIsSubmitSuccess(true)
+            navigate("/tasks", { replace: true })
+        } catch (error) {
+            setIsSubmitError(getAuthErrorMessage(error))
+        } finally {
             setIsSubmitting(false)
         }
     }
@@ -71,12 +89,10 @@ function LoginForm() {
         }))
     }
 
-
-
     return (
         <form
             className="form-container"
-            onSubmit={handleFormSubmit} noValidate
+            onSubmit={handleSignIn} noValidate
         >
             <div className="form-group">
                 <label className="form-label" htmlFor="email">Email:</label>
@@ -112,6 +128,15 @@ function LoginForm() {
                 type="submit"
             >
                 {isSubmitting ? "Enviando..." : "Enviar"}
+            </button>
+
+            <button
+                className="form-button"
+                onClick={handleWithInGoogle}
+                disabled={isSubmitting}
+                type="button"
+            >
+                {isSubmitting ? "Enviando..." : "Iniciar sesión con Google"}
             </button>
 
             {isSubmitSuccess && <p className="success-text"> Formulario enviado exitosamente </p>}

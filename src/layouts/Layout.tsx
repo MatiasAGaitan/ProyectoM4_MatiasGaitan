@@ -1,6 +1,8 @@
 import { Link, Outlet } from "react-router-dom";
+import { useAuth } from "../features/Authenticator";
 
 function Layout() {
+    const { logout, user } = useAuth()
     return (
         <div>
             <nav className="layout-nav">
@@ -11,6 +13,8 @@ function Layout() {
                 <Link to="/tasks">Tareas</Link>
                 {" | "}
                 <Link to="/login">Iniciar Seccion</Link>
+                {" | "}
+                {user && <button className="layout-button" onClick={logout}>Cerrar sesión</button>}
             </nav>
             <main>
                 <Outlet />

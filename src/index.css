@@ -44,6 +44,20 @@ body {
   text-decoration: underline;
 }
 
+.layout-button {
+  background-color: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.layout-button:hover {
+  text-decoration: underline;
+}
+
+
 .page-container {
   display: flex;
   flex-direction: column;
