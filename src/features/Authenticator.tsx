@@ -7,7 +7,7 @@ import {
     type JSX
 } from "react";
 
-import { auth } from "../services/firebase";
+import { auth } from "../config/firebase.config";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,

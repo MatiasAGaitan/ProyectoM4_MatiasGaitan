@@ -4,7 +4,7 @@ import { useAuth } from "../features/Authenticator";
 function Layout() {
     const { logout, user } = useAuth()
     return (
-        <div>
+        <div className="layout-container">
             <nav className="layout-nav">
                 <Link to="/">Inicio</Link>
                 {" | "}
@@ -12,14 +12,13 @@ function Layout() {
                 {" | "}
                 <Link to="/tasks">Tareas</Link>
                 {" | "}
-                <Link to="/login">Iniciar Seccion</Link>
-                {" | "}
+                {!user && <Link to="/login">Iniciar Seccion</Link>}
                 {user && <button className="layout-button" onClick={logout}>Cerrar sesión</button>}
             </nav>
-            <main>
+            <main className="layout-main">
                 <Outlet />
             </main>
-            <footer>
+            <footer className="layout-footer">
                 {/* <p>&copy; 2024 Proyecto Final. Todos los derechos reservados.</p> */}
             </footer>
         </div>

@@ -14,3 +14,4 @@ export interface RegisterFormState {
 
 // Tipado del error
 export type FieldError = Partial<Record<keyof LoginFormState | keyof RegisterFormState, string>>
+
