@@ -41,7 +41,7 @@ function RegisterForm() {
         setIsSubmitting(true)
 
         try {
-            await signUp(formRegister.email, formRegister.password)
+            await signUp(formRegister.email, formRegister.password, formRegister.name)
             //Formulario enviado
             setIsSubmitSuccess(true)
             // Limpiamos el formulario

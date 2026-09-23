@@ -8,7 +8,6 @@ function RequireAuth({ children }: { children: ReactNode }): JSX.Element {
 
     if (loading) return <p>Cargando sesión...</p>;
     if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
-    console.log(user)
     return <>{children}</>;
 }
 

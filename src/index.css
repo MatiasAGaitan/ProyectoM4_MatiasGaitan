@@ -402,3 +402,44 @@ body {
   margin-top: 0;
   padding: 0.65rem 1.25rem;
 }
+
+/* ── Email Button ───────────────────────────────────── */
+
+.email-btn {
+  width: 100%;
+  max-width: 22rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+}
+
+/* ── Toast Notifications ────────────────────────────── */
+
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 200;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.toast--success {
+  background-color: rgba(3, 218, 198, 0.15);
+  border: 1px solid var(--success-color);
+  color: var(--success-color);
+}
+
+.toast--error {
+  background-color: rgba(207, 102, 121, 0.15);
+  border: 1px solid var(--error-color);
+  color: var(--error-color);
+}

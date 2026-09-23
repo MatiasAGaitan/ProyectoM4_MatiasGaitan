@@ -2,6 +2,7 @@ import { useAuth } from "../features/Authenticator"
 import { useState, useEffect } from "react"
 import type { Task, NewTaskInput, EditTask } from "../types/task"
 import { addTask, deleteTask, editTask, getTasksByUser } from "../services/firestore"
+import SendEmailButton from "./SendEmailButton"
 
 function TaskForm() {
     const { user } = useAuth()
@@ -26,6 +27,7 @@ function TaskForm() {
     const [isEditing, setIsEditing] = useState<EditTask | null>(null)
     const [editingTaskId, setEditingTaskId] = useState<string | null>(null)
     const [errorEdit, setErrorEdit] = useState<string>("")
+    const [isSuccessEdit, setIsSuccessEdit] = useState<boolean | null>(null)
 
     useEffect(() => {
         if (!user?.uid) return
@@ -119,11 +121,17 @@ function TaskForm() {
             await editTask(id, changes);
             setTasks((prev) => prev.map((task) => task.id === id ? { ...task, ...changes } : task))
             setIsEditing(null)
+            setIsSuccessEdit(true)
         } catch (error) {
             console.log(error)
             setErrorEdit(error instanceof Error ? error.message : "Error al editar la tarea")
+            setIsSuccessEdit(false)
         } finally {
             setEditingTaskId(null)
+            // Limpiamos el mensaje de éxito
+            setTimeout(() => {
+                setIsSuccessEdit(null)
+            }, 3000)
         }
     }
 
@@ -231,11 +239,23 @@ function TaskForm() {
                                     disabled={editingTaskId === isEditing.id}>
                                     {editingTaskId === isEditing.id ? "Guardando..." : "Guardar"}
                                 </button>
+
                             </div>
                         </form>
                     </div>
                 </div>
             )}
+            {isSuccessEdit === true && (
+                <div className="toast toast--success">
+                    <p>✅ Tarea editada correctamente</p>
+                </div>
+            )}
+            {isSuccessEdit === false && (
+                <div className="toast toast--error">
+                    <p>❌ Error al editar la tarea</p>
+                </div>
+            )}
+            <SendEmailButton tasks={tasks} />
         </div>
     )
 }

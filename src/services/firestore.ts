@@ -35,7 +35,6 @@ export async function getTasksByUser(userId: string): Promise<Task[]> {
 
     const snapshot = await getDocs(q);
 
-    console.log("datos de firestore", snapshot);
 
     // Nota: Firestore no garantiza orden si no usás orderBy.
     // Para este hands-on, priorizamos claridad: query mínima.
