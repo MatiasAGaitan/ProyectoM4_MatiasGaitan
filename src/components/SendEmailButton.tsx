@@ -10,6 +10,10 @@ function SendEmailButton({ tasks }: { tasks: Task[] }) {
 
     const { user } = useAuth()
 
+    if (!user) {
+        return null
+    }
+
     const handleSendEmail = async (): Promise<void> => {
         setError("")
         setStatus("loading")

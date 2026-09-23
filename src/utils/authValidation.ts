@@ -1,8 +1,8 @@
-import type { PrompsForm, PrompsFormRegister, filedError } from "../types/auth.ts"
+import type { LoginFormState, RegisterFormState, FieldError } from "../types/auth.ts"
 
 // Validacion de errores login
-export const validateErrorsLogin = (form: PrompsForm): filedError => {
-    const err: filedError = {}
+export const validateErrorsLogin = (form: LoginFormState): FieldError => {
+    const err: FieldError = {}
 
     if (form.email.trim() === "") {
         err.email = "El email es requerido"
@@ -20,8 +20,8 @@ export const validateErrorsLogin = (form: PrompsForm): filedError => {
 }
 
 // validacion de errores register
-export const validateErrorsRegister = (form: PrompsFormRegister): filedError => {
-    const err: filedError = {}
+export const validateErrorsRegister = (form: RegisterFormState): FieldError => {
+    const err: FieldError = {}
 
     if (!form.name.trim()) {
         err.name = "El nombre es requerido"

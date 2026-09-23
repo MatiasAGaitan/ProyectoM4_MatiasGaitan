@@ -65,7 +65,7 @@ function LoginForm() {
         }
     }
 
-    const handleWithInGoogle = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleWithInGoogle = async (): Promise<void> => {
         setIsSubmitSuccess(false)
         setIsSubmitError("")
         setIsSubmitting(true)
