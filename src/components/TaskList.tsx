@@ -3,6 +3,7 @@ import { useState } from "react"
 import { deleteTask } from "../services/firestore"
 import type { Task } from "../types/task"
 import type { TaskStatus } from "../types/status"
+import { Pencil, Trash2 } from "lucide-react"
 
 interface TaskListProps {
     tasks: Task[]
@@ -41,10 +42,11 @@ function TaskList({ tasks, setTasks, setIsEditing, editingTaskId, setStatusDelet
                 {tasks.map((task) => (
                     <li className="task-item" key={task.id}>
                         <div className="task-info">
-                            <span className="task-title">{task.title}</span>
-                            <span className={`task-status ${task.completed ? "task-status--done" : "task-status--pending"}`}>
+                            <p className="task-title">{task.title}</p>
+                            <p className="task-description">{task.description}</p>
+                            <p className={`task-status ${task.completed ? "task-status--done" : "task-status--pending"}`}>
                                 {task.completed ? "Completada" : "Pendiente"}
-                            </span>
+                            </p>
                         </div>
                         <div className="task-actions">
                             <button
@@ -53,6 +55,7 @@ function TaskList({ tasks, setTasks, setIsEditing, editingTaskId, setStatusDelet
                                 disabled={deletingTaskId === task.id || editingTaskId === task.id}
                                 onClick={() => setIsEditing(task)}>
                                 {editingTaskId === task.id ? "Editando..." : "Editar"}
+                                <Pencil />
                             </button>
                             <button
                                 className="task-btn task-btn--delete"
@@ -60,6 +63,7 @@ function TaskList({ tasks, setTasks, setIsEditing, editingTaskId, setStatusDelet
                                 disabled={deletingTaskId === task.id || editingTaskId === task.id}
                                 onClick={() => handleDeleteTask(task.id)}>
                                 {deletingTaskId === task.id ? "Eliminando..." : "Eliminar"}
+                                <Trash2 />
                             </button>
                         </div>
                     </li>

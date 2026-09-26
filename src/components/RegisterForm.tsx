@@ -27,31 +27,25 @@ function RegisterForm() {
     const handlerSignUpSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // Formulario enviado? False
         setIsSubmitSuccess(false)
-        // Reseteamos los errores
         setIsSubmitError("")
 
-        // Valida el formulario
         const errorsValidated = validateErrorsRegister(formRegister)
         setErrorsRegister(errorsValidated);
 
         if (Object.keys(errorsValidated).length > 0) return
-        //Iniciando el envio del formulario
         setIsSubmitting(true)
 
         try {
             await signUp(formRegister.email, formRegister.password, formRegister.name)
-            //Formulario enviado
+
             setIsSubmitSuccess(true)
-            // Limpiamos el formulario
             setFormRegister(INITIAL_STATE)
-            //Navegamos a la ruta "/tasks"
+
             navigate("/tasks", { replace: true })
         } catch (error) {
             setIsSubmitError(getAuthErrorMessage(error))
         } finally {
-            // Formulario enviado
             setIsSubmitting(false)
         }
     }
@@ -80,8 +74,6 @@ function RegisterForm() {
             [name]: value,
         }))
     }
-
-
 
     return (
         <form

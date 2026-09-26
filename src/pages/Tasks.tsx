@@ -67,12 +67,13 @@ function Tasks() {
                 />
             )}
 
+            <p className="task-total">Total: {tasks.length} tarea{tasks.length !== 1 ? "s" : ""}</p>
+
             {tasks.length === 0 && !isLoadingTasks && !errorLoadTasks &&
                 <p className="task-state-msg">No tenés tareas todavía. ¡Crea una!</p>}
 
             <SendEmailButton tasks={tasks} />
 
-            <p className="task-total">Total: {tasks.length} tarea{tasks.length !== 1 ? "s" : ""}</p>
 
             <RenderStatus
                 taskStatus={taskStatus}

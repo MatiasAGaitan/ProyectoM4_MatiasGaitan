@@ -3,6 +3,7 @@ import type { Task } from "../types/task"
 import type { ButtonEmailStatus, ApiResponse } from "../types/buttonEmail"
 import { useAuth } from "../features/Authenticator"
 import { createTaskSummary } from "../utils/createTaskSummary"
+import { Mail } from "lucide-react"
 
 function SendEmailButton({ tasks }: { tasks: Task[] }) {
     const [status, setStatus] = useState<ButtonEmailStatus>("idle")
@@ -60,7 +61,7 @@ function SendEmailButton({ tasks }: { tasks: Task[] }) {
                 type="button"
                 onClick={handleSendEmail}
             >
-                {status === "loading" ? "Enviando..." : "📧 Enviar resumen por email"}
+                {status === "loading" ? "Enviando..." : "Enviar resumen por email"} <Mail />
             </button>
 
             {status === "error" && (

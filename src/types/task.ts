@@ -1,10 +1,9 @@
 import type { Timestamp } from "firebase/firestore";
 
-
-// Tipado de tareas
 export interface Task {
     id: string
     title: string
+    description: string
     completed: boolean
     userId: string
     createdAt?: Timestamp
@@ -12,5 +11,7 @@ export interface Task {
 
 export interface NewTaskInput {
     title: string
+    description: string
 }
 
+export type EditTaskInput = Pick<Task, "title" | "description" | "completed">

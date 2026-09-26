@@ -1,7 +1,8 @@
 import { useState } from "react"
-import type { Task } from "../types/task"
+import type { EditTaskInput, Task } from "../types/task"
 import type { TaskStatus } from "../types/status"
 import { editTask } from "../services/firestore"
+import { validateNewTask } from "../utils/inputValidate"
 
 interface TaskEditProps {
     isEditing: Task
@@ -18,27 +19,21 @@ function TaskEdit({ isEditing, setIsEditing, editingTaskId, setEditingTaskId, se
     const [errorEdit, setErrorEdit] = useState<string>("")
 
     const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
         setIsEditing(prev => {
             if (!prev) return null
-            return { ...prev, title: e.target.value }
+            return { ...prev, [name]: value }
         })
     }
 
-    const handleEditTask = async (e: React.FormEvent<HTMLFormElement>, id: string, changes: Partial<Task>) => {
+    const handleEditTask = async (e: React.FormEvent<HTMLFormElement>, id: string, changes: EditTaskInput) => {
         e.preventDefault()
 
-        if (!changes.title?.trim()) {
-            setErrorEdit("Debes ingresar una tarea")
-            return
-        } else if (changes.title.trim().length < 3) {
-            setErrorEdit("La tarea debe tener al menos 3 caracteres")
-            return
-        } else {
-            setErrorEdit("")
-        }
+        const errorMsg = validateNewTask(changes.title, changes.description)
+        setErrorEdit(errorMsg)
+        if (errorMsg) return
 
         setEditingTaskId(id)
-        setErrorEdit("")
         try {
             await editTask(id, changes);
             setTasks(prev => {
@@ -55,7 +50,6 @@ function TaskEdit({ isEditing, setIsEditing, editingTaskId, setEditingTaskId, se
             setTimeout(() => {
                 setTaskStatus(null)
             }, 3000)
-
         }
     }
 
@@ -65,22 +59,38 @@ function TaskEdit({ isEditing, setIsEditing, editingTaskId, setEditingTaskId, se
             return { ...prev, completed: !prev.completed }
         })
     }
+
     return (
         <div className="modal-overlay">
             <div className="modal">
                 <h2 className="modal-title">Editar tarea</h2>
                 <form
                     className="modal-form"
-                    onSubmit={(e) => handleEditTask(e, isEditing.id, { title: isEditing.title, completed: isEditing.completed })}
+                    onSubmit={(e) => handleEditTask(e, isEditing.id, { title: isEditing.title, description: isEditing.description, completed: isEditing.completed })}
                     noValidate
                 >
+                    <label className="form-label" htmlFor="title">Titulo</label>
                     <input
                         className="form-input"
                         type="text"
+                        id="title"
+                        name="title"
                         value={isEditing.title}
                         onChange={handleEditChange}
                     />
+
+                    <label className="form-label" htmlFor="description">Descripción</label>
+                    <input
+                        className="form-input"
+                        type="text"
+                        id="description"
+                        name="description"
+                        value={isEditing.description}
+                        onChange={handleEditChange}
+                    />
+
                     {errorEdit && <p className="error-text">{errorEdit}</p>}
+
                     <button
                         className={`task-btn task-btn--toggle ${isEditing.completed ? "task-btn--done" : ""}`}
                         type="button"
@@ -88,6 +98,7 @@ function TaskEdit({ isEditing, setIsEditing, editingTaskId, setEditingTaskId, se
                         disabled={editingTaskId === isEditing.id}>
                         {isEditing.completed ? "✅ Marcar como pendiente" : "⬜ Marcar como completada"}
                     </button>
+
                     <div className="modal-actions">
                         <button
                             className="task-btn task-btn--cancel"
@@ -96,9 +107,11 @@ function TaskEdit({ isEditing, setIsEditing, editingTaskId, setEditingTaskId, se
                             disabled={editingTaskId === isEditing.id}>
                             Cancelar
                         </button>
+
                         <button
                             className="form-button"
                             type="submit"
+
                             disabled={editingTaskId === isEditing.id}>
                             {editingTaskId === isEditing.id ? "Guardando..." : "Guardar"}
                         </button>

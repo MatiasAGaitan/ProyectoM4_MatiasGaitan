@@ -7,34 +7,24 @@ import { getAuthErrorMessage } from "../features/authErrors.ts";
 
 function LoginForm() {
 
-    // Estado inicial del formulario
     const INITIAL_STATE: LoginFormState = {
         email: "",
         password: "",
     }
 
-    // Estado del formulario
     const [form, setForm] = useState<LoginFormState>(INITIAL_STATE);
-    // Estado de los errores para los inputs
     const [errors, setErrors] = useState<FieldError>({})
-    // Estado para enviando formulario
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-    // Estado de formulario enviado
     const [isSubmitSuccess, setIsSubmitSuccess] = useState<boolean>(false)
-    // Estado de errores cuando en la respuesta del servidor
     const [isSubmitError, setIsSubmitError] = useState<string>("")
-
-    // Para navegar a otra ruta
     const navigate = useNavigate()
 
     const { signIn, signInWithGoogle } = useAuth()
 
-    // Manejo del envio del formulario
     const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        // Formulario no enviado por lo tanto success es false
+
         setIsSubmitSuccess(false)
-        // Reseteamos el error
         setIsSubmitError("")
 
         const errorsValidated = validateErrorsLogin(form);
@@ -42,25 +32,15 @@ function LoginForm() {
 
         if (Object.keys(errorsValidated).length > 0) return
 
-        //Enviando formulario
         setIsSubmitting(true)
         try {
             await signIn(form.email, form.password)
-
-            //Formularo enviado por lo tanto true
             setIsSubmitSuccess(true)
-
-            //Limpiamos el formulario
             setForm(INITIAL_STATE)
-
-            // Navegamos a la ruta "/tasks"
             navigate("/tasks", { replace: true })
         } catch (error) {
             setIsSubmitError(getAuthErrorMessage(error))
-
-
         } finally {
-            //Formulario enviado por lo tanto false
             setIsSubmitting(false)
         }
     }
@@ -81,7 +61,6 @@ function LoginForm() {
         }
     }
 
-    // Manejo del cambio de los inputs
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm((prev) => ({
             ...prev,

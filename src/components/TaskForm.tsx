@@ -3,6 +3,8 @@ import { useState } from "react"
 import type { Task, NewTaskInput } from "../types/task"
 import type { TaskStatus } from "../types/status"
 import { addTask } from "../services/firestore"
+import { validateNewTask } from "../utils/inputValidate"
+import { Plus } from "lucide-react"
 
 interface TaskFormProps {
     setTasks: React.Dispatch<React.SetStateAction<Task[]>>
@@ -12,10 +14,9 @@ interface TaskFormProps {
 function TaskForm({ setTasks, setTaskStatus }: TaskFormProps) {
     const { user } = useAuth()
 
-    const [newTask, setNewTask] = useState<NewTaskInput>({ title: "" })
+    const [newTask, setNewTask] = useState<NewTaskInput>({ title: "", description: "" })
     const [errorTaskInput, setErrorTaskInput] = useState<string>("")
 
-    //estados para agregar tareas
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
     const [errorSubmit, setErrorSubmit] = useState<string>("")
 
@@ -27,15 +28,10 @@ function TaskForm({ setTasks, setTaskStatus }: TaskFormProps) {
     const handleSubmitTask = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
-        if (!newTask.title.trim()) {
-            setErrorTaskInput("Debes ingresar una tarea")
-            return
-        } else if (newTask.title.trim().length < 3) {
-            setErrorTaskInput("La tarea debe tener al menos 3 caracteres");
-            return
-        } else {
-            setErrorTaskInput("")
-        }
+        const errorMsg = validateNewTask(newTask.title, newTask.description)
+        setErrorTaskInput(errorMsg)
+
+        if (errorMsg) return
 
         if (!user) return
         setIsSubmitting(true)
@@ -44,7 +40,7 @@ function TaskForm({ setTasks, setTaskStatus }: TaskFormProps) {
         try {
             const data = await addTask(newTask, user.uid)
             setTasks(prev => [...prev, data])
-            setNewTask({ title: "" })
+            setNewTask({ title: "", description: "" })
             setTaskStatus("create-success")
         } catch (error) {
             setErrorSubmit(error instanceof Error ? error.message : "Error al agregar la tarea")
@@ -58,11 +54,11 @@ function TaskForm({ setTasks, setTaskStatus }: TaskFormProps) {
 
     return (
         <div className="task-page">
-            <p className="task-user">👤 {user?.displayName}</p>
 
             <form className="task-add-form" noValidate onSubmit={handleSubmitTask}>
-                <label className="form-label" htmlFor="title">Nueva tarea</label>
+                <p className="task-form-add">Nueva tarea</p>
                 <div className="task-add-row">
+                    <label className="form-label" htmlFor="title">Titulo</label>
                     <input
                         className="form-input"
                         type="text"
@@ -70,10 +66,21 @@ function TaskForm({ setTasks, setTaskStatus }: TaskFormProps) {
                         name="title"
                         value={newTask.title}
                         onChange={handleTaskChange}
-                        placeholder="Agrega una nueva tarea..."
+                        placeholder="Agrega el titulo de la nueva tarea..."
                     />
+                    <label className="form-label" htmlFor="description">Descripción</label>
+                    <input
+                        className="form-input"
+                        type="text"
+                        id="description"
+                        name="description"
+                        value={newTask.description}
+                        onChange={handleTaskChange}
+                        placeholder="Agrega la descripción de la nueva tarea..."
+                    />
+
                     <button className="form-button task-add-btn" type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? "Agregando..." : "Agregar"}
+                        <Plus /> {isSubmitting ? "Agregando..." : "Agregar"}
                     </button>
                 </div>
                 {errorTaskInput && <p className="error-text">{errorTaskInput}</p>}
