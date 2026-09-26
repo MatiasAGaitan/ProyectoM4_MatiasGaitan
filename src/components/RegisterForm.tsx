@@ -50,11 +50,9 @@ function RegisterForm() {
             navigate("/tasks", { replace: true })
         } catch (error) {
             setIsSubmitError(getAuthErrorMessage(error))
-
         } finally {
             // Formulario enviado
             setIsSubmitting(false)
-            console.log("reinicio de boton")
         }
     }
 

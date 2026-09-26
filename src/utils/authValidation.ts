@@ -27,7 +27,8 @@ export const validateErrorsRegister = (form: RegisterFormState): FieldError => {
         err.name = "El nombre es requerido"
     } else if (form.name.length < 3) {
         err.name = "El nombre debe tener mas de 3 caracteres"
-    } else if (!form.email.trim()) {
+    }
+    if (!form.email.trim()) {
         err.email = "El email es requerido"
     } else if (!form.email.includes('@') || !form.email.includes('.')) {
         err.email = "El email tiene que tener formato valido"

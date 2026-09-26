@@ -111,8 +111,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse,):
 
         const result = await sesClient.send(command)
 
-        console.log("result", result)
-
         res.status(200).json({
             message: "Correo enviado correctamente",
             messageId: result.MessageId,
