@@ -1,6 +1,6 @@
 import { describe, expect, test, vi, beforeEach } from "vitest"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
-import handler from "./send-email"
+import handler from "../../api/send-email"
 
 const { sendMock } = vi.hoisted(() => ({
     sendMock: vi.fn(),

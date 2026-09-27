@@ -215,7 +215,6 @@ No se deben subir claves privadas ni archivos `.env` al repositorio.
 📦 MateCode
 ├── 📁 api
 │   ├── 📄 send-email.ts
-│   └── 📄 send-email.test.ts
 ├── 📁 public
 │   ├── 📄 favicon.svg
 │   └── 📄 icons.svg
@@ -288,6 +287,9 @@ No se deben subir claves privadas ni archivos `.env` al repositorio.
 ├── 📄 index.html
 ├── 📄 package.json
 ├── 📄 README.md
+├── 📁 test
+│   └── 📁 api
+│       └── 📄 send-email.test.ts
 ├── 📄 tsconfig.json
 └── 📄 vite.config.ts
 ```
