@@ -89,8 +89,6 @@ function TaskEdit({ isEditing, setIsEditing, editingTaskId, setEditingTaskId, se
                         onChange={handleEditChange}
                     />
 
-                    {errorEdit && <p className="error-text">{errorEdit}</p>}
-
                     <button
                         className={`task-btn task-btn--toggle ${isEditing.completed ? "task-btn--done" : ""}`}
                         type="button"

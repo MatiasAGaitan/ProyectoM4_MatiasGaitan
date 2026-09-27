@@ -33,7 +33,7 @@ function About() {
                     </p>
                 </div>
 
-                <div className="about-card about-card--features">
+                <div className="about-card">
                     <h2><CheckCircle />Funcionalidades</h2>
                     <ul>
                         <li>Registro e inicio de sesion</li>

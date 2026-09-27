@@ -15,9 +15,16 @@ function SendEmailButton({ tasks }: { tasks: Task[] }) {
         return null
     }
 
+
     const handleSendEmail = async (): Promise<void> => {
         setError("")
         setStatus("loading")
+
+        if (!user.email) {
+            setError("No se pudo obtener el correo del usuario")
+            setStatus("error")
+            return
+        }
 
         try {
             const response = await fetch("/api/send-email", {
@@ -28,7 +35,7 @@ function SendEmailButton({ tasks }: { tasks: Task[] }) {
                 },
 
                 body: JSON.stringify({
-                    name: user.displayName,
+                    name: user.displayName ?? user.email,
                     email: user.email,
                     message: createTaskSummary(tasks)
                 }),

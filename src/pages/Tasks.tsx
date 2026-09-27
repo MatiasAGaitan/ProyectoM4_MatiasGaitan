@@ -47,6 +47,7 @@ function Tasks() {
                 setTasks={setTasks}
                 setTaskStatus={setTaskStatus}
             />
+            {isLoadingTasks && <p>Cargando tareas...</p>}
 
             <TaskList
                 tasks={tasks}
@@ -71,6 +72,8 @@ function Tasks() {
 
             {tasks.length === 0 && !isLoadingTasks && !errorLoadTasks &&
                 <p className="task-state-msg">No tenés tareas todavía. ¡Crea una!</p>}
+
+            {errorLoadTasks && <p className="error-msg">Error al cargar las tareas</p>}
 
             <SendEmailButton tasks={tasks} />
 

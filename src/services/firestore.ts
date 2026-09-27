@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../config/firebase.config";
-import type { NewTaskInput, Task } from "../types/task";
+import type { EditTaskInput, NewTaskInput, Task } from "../types/task";
 
 type TaskFirestoreDoc = Omit<Task, "id">;
 
@@ -60,7 +60,7 @@ export async function deleteTask(taskId: string): Promise<void> {
     await deleteDoc(taskRef);
 }
 
-export async function editTask(taskId: string, changes: Partial<Task>): Promise<void> {
+export async function editTask(taskId: string, changes: Partial<EditTaskInput>): Promise<void> {
     const taskRef = doc(db, "tasks", taskId);
 
     await updateDoc(taskRef, changes);
