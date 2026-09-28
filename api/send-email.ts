@@ -66,8 +66,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse,):
 
     const region = process.env.AWS_REGION?.trim()
     const from = process.env.SES_FROM_EMAIL?.trim()
+    const to = process.env.SES_TO_EMAIL?.trim()
 
-    if (!region || !from) {
+
+    if (!region || !from || !to) {
         console.error("Faltan variables de entorno de SES")
 
         res.status(500).json({
@@ -86,7 +88,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse,):
             Source: from,
 
             Destination: {
-                ToAddresses: [normalizedEmail],
+                ToAddresses: [normalizedEmail, to], //enviamos a ambos correos para que quede registrado en mi correo como tambien en el del usuario ambos correos tienen que estar verificados 
             },
 
             Message: {

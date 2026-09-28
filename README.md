@@ -97,6 +97,7 @@ vercel env add AWS_ACCESS_KEY_ID
 vercel env add AWS_SECRET_ACCESS_KEY
 
 vercel env add SES_FROM_EMAIL
+vercel env add SES_TO_EMAIL
 ```
 
 5. Ejecutar un deploy de prueba:
@@ -183,13 +184,18 @@ AWS_REGION=
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 SES_FROM_EMAIL=
+SES_TO_EMAIL=
 ```
 
 Las variables que comienzan con `VITE_` son utilizadas por el frontend para inicializar Firebase.
 
-Las variables `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` y `SES_FROM_EMAIL` se utilizan únicamente en la función serverless `api/send-email.ts`.
+Las variables `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `SES_FROM_EMAIL` y `SES_TO_EMAIL` se utilizan únicamente en la función serverless `api/send-email.ts`.
 
 `AWS_ACCESS_KEY_ID` y `AWS_SECRET_ACCESS_KEY` son leídas automáticamente por el SDK de AWS al crear el cliente de SES.
+
+`SES_FROM_EMAIL` y `SES_TO_EMAIL` son utilizadas por la función serverless para enviar correos electrónicos.
+
+Enviamos correo a ambos destinatarios para que quede registrado en mi correo como tambien en el del usuario ambos correos tienen que estar verificados en AWS SES.
 
 No se deben subir claves privadas ni archivos `.env` al repositorio.
 

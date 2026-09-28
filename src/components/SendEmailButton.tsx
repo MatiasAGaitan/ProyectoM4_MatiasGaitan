@@ -5,11 +5,14 @@ import { useAuth } from "../features/Authenticator"
 import { createTaskSummary } from "../utils/createTaskSummary"
 import { Mail } from "lucide-react"
 
+
+
 function SendEmailButton({ tasks }: { tasks: Task[] }) {
     const [status, setStatus] = useState<ButtonEmailStatus>("idle")
     const [error, setError] = useState("")
 
     const { user } = useAuth()
+
 
     if (!user) {
         return null
