@@ -13,9 +13,8 @@ Cuando agregues nuevas tareas, podrás recibir aquí un resumen de tu progreso.
 Gracias por usar nuestra aplicación.
   `.trim();
 	}
-
-	const tasksCompleted = tasks.filter((task) => task.completed).map((task) => task.title)
-	const tasksIncompleted = tasks.filter((task) => !task.completed).map((task) => task.title)
+	const tasksCompleted = tasks.filter((task) => task.completed).map((task) => `${task.title} (${task.description})`)
+	const tasksIncompleted = tasks.filter((task) => !task.completed).map((task) => `${task.title} (${task.description})`)
 
 	return `
 Resumen de tareas

@@ -32,6 +32,7 @@ describe("send-email api", () => {
 
         process.env.AWS_REGION = "us-east-1"
         process.env.SES_FROM_EMAIL = "test@test.com"
+        process.env.SES_TO_EMAIL = "admin@test.com"
     })
 
     test("devuelve 405 si el metodo no es POST", async () => {
@@ -102,6 +103,7 @@ describe("send-email api", () => {
     test("devuelve 500 si faltan variables de entorno", async () => {
         delete process.env.AWS_REGION
         delete process.env.SES_FROM_EMAIL
+        delete process.env.SES_TO_EMAIL
 
         const req = {
             method: "POST",

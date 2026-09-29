@@ -11,7 +11,8 @@
 - [Tecnologías Usadas](#-tecnologías-usadas)
 - [Organización Del Proyecto](#-organización-del-proyecto)
 - [Arquitectura Y Decisiones Técnicas](#-arquitectura-y-decisiones-técnicas)
-- [Capturas De La App](#-capturas-de-la-app)
+- [Capturas De La App Celular](#-capturas-de-la-app-celular)
+- [Capturas De La App Computadora](#-capturas-de-la-app-computadora)
 - [Uso De La IA](#-uso-de-la-ia)
 - [Tests](#-tests)
 - [Notas](#-notas)
@@ -131,7 +132,7 @@ Para probar el proyecto localmente:
 1. Clonar el repositorio:
 
 ```bash
-git clone AGREGAR_URL_DEL_REPOSITORIO
+git clone https://github.com/MatiasAGaitan/ProyectoM4_MatiasGaitan.git
 ```
 
 2. Entrar a la carpeta del proyecto:
@@ -467,7 +468,7 @@ Actualmente se testean:
 Para ejecutar los tests una sola vez:
 
 ```bash
-npm run test
+npm test -- --run
 ```
 
 ### Ejecutar Tests En Modo Watch
@@ -500,7 +501,13 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     match /tasks/{taskId} {
-      allow read, create, update, delete: if request.auth != null
+      allow read: if request.auth != null
+        && request.auth.uid == resource.data.userId;
+
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.userId;
+
+      allow update, delete: if request.auth != null
         && request.auth.uid == resource.data.userId;
     }
   }
