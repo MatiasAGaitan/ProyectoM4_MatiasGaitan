@@ -443,7 +443,7 @@ Las decisiones finales se aplicaron entendiendo el código y manteniendo cambios
 
 Evidencia del uso de IA:
 
-[AGREGAR LINK A DOCUMENTO O EVIDENCIA DE USO DE IA](AGREGAR_LINK_DE_IA)
+[Documentación de uso de IA](https://docs.google.com/document/d/1BlPkXbY3kvQmgDBuLallqTIzDhIYZ3jIizPOPHQP_V4/edit?usp=sharing)
 
 ## 🧪 Tests
 
