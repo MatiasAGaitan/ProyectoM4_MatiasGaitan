@@ -514,6 +514,54 @@ service cloud.firestore {
 }
 ```
 
+### ✉️ Flujo De Envío De Email
+
+El envío del resumen de tareas se realiza mediante una función serverless para evitar exponer credenciales sensibles en el frontend.
+
+El flujo funciona de la siguiente manera:
+
+1. El usuario inicia sesión y entra a la sección de tareas.
+
+2. Desde el botón **Enviar resumen por email**, el componente `SendEmailButton` toma las tareas actuales del usuario.
+
+3. Las tareas se transforman en un texto resumido mediante la función `createTaskSummary(tasks)`.
+
+4. El frontend envía una petición `POST` a la función serverless:
+
+```txt
+/api/send-email
+```
+
+5. La función `api/send-email.ts` valida que el cuerpo de la petición tenga los datos necesarios:
+
+- `name`
+- `email`
+- `message`
+
+6. También valida que existan las variables de entorno necesarias para AWS SES:
+
+- `AWS_REGION`
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `SES_FROM_EMAIL`
+- `SES_TO_EMAIL`
+
+7. Si los datos son válidos, la función crea un cliente de AWS SES y prepara el comando de envío con `SendEmailCommand`.
+
+8. El correo se envía a dos destinatarios:
+
+- El email del usuario autenticado.
+- El email configurado en `SES_TO_EMAIL`.
+
+Esto permite que el usuario reciba su resumen y que también quede una copia registrada en el correo del administrador.
+
+9. Finalmente, la interfaz muestra el resultado del envío:
+
+- ✅ `Email enviado correctamente`
+- ❌ Mensaje de error si algo falla
+
+Este flujo mantiene las credenciales protegidas, porque el frontend nunca accede directamente a AWS SES. Toda la comunicación sensible ocurre dentro de la función serverless de Vercel.
+
 
 ## 👨‍💻 Autor
 
